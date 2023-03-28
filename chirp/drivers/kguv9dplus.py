@@ -127,7 +127,7 @@ config_map2 = (          # map address, write size, write count
 
 MEM_VALID = 0xfc
 MEM_INVALID = 0xff
-VALID_MEM_VALUES = [MEM_VALID, 0x00, 0x02, 0x40, 0x3D]
+VALID_MEM_VALUES = [MEM_VALID, 0x00, 0x01, 0x02, 0x40, 0x3D, 0x80]
 
 # Radio memory map. This matches the reads/writes above.
 # structure elements whose name starts with x are currently unidentified
@@ -1426,7 +1426,8 @@ class KGUV9DPlusRadio(chirp_common.CloneModeRadio,
         if _valid == MEM_INVALID and _mem.rxfreq != 0xFFFFFFFF and _nam != '':
             _valid = MEM_VALID
 
-        if _valid not in VALID_MEM_VALUES:
+        if not (_valid in VALID_MEM_VALUES and _mem.rxfreq != 0xFFFFFFFF and
+                _nam != ''):
             # In Issue #6995 we can find _valid values of 0 and 2 in the IMG
             # so these values should be treated like MEM_VALID.
             # state value of 0x40 found in deleted memory - still shows in CPS
